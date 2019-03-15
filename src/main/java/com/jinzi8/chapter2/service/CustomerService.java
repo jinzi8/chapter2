@@ -11,11 +11,10 @@ import java.util.Map;
 public class CustomerService {
     /**
      * 获取客户列表
-     * @param keyword 关键字
      * @return 客户列表
      */
-    public List<Customer> getCustomerList(String keyword){
-        //TODO0
+    public List<Customer> getCustomerList(){
+        //TODO
          return null;
     }
 
