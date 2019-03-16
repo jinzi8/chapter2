@@ -12,8 +12,8 @@ import java.util.List;
 public class CustomerServiceTest {
     private final CustomerService customerService;
 
-    public CustomerServiceTest(CustomerService customerService) {
-        this.customerService = customerService;
+    public CustomerServiceTest() {
+        this.customerService = new CustomerService();
     }
 
     @Before
@@ -28,7 +28,7 @@ public class CustomerServiceTest {
     @Test
     public void getCustomerList() {
         List<Customer> customerList = customerService.getCustomerList();
-        Assert.assertEquals(2,customerList.size());
+        Assert.assertEquals(2, customerList.size());
     }
 
     @Test
@@ -41,9 +41,9 @@ public class CustomerServiceTest {
     @Test
     public void createCustomer() {
         HashMap<String, Object> fieldMap = new HashMap<>();
-        fieldMap.put("name","customer100");
-        fieldMap.put("contact","john");
-        fieldMap.put("telephone","14232233333");
+        fieldMap.put("name", "customer100");
+        fieldMap.put("contact", "john");
+        fieldMap.put("telephone", "14232233333");
         boolean result = customerService.createCustomer(fieldMap);
         Assert.assertTrue(result);
     }
