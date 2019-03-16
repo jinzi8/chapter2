@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -28,11 +29,11 @@ public class CustomerService {
      * @return 客户列表
      */
     public List<Customer> getCustomerList() {
-        Connection conn = null;
+        Connection connection = DatabaseHelper.getConnection();
         try {
-            ArrayList<Customer> customers = new ArrayList<>();
+            List<Customer> customers = new ArrayList<>();
             String sql = "SELECT * FROM customer";
-            conn = DatabaseHelper.getConnection();
+/*
             PreparedStatement ppst = conn.prepareStatement(sql);
             ResultSet resultSet = ppst.executeQuery();
             while (resultSet.next()) {
@@ -45,11 +46,13 @@ public class CustomerService {
                 customer.setRemark(resultSet.getString("remark"));
                 customers.add(customer);
             }
+            */
+            customers = DatabaseHelper.queryEntityList(Customer.class, sql, connection);
             return customers;
         } catch (Exception e) {
             LOGGER.error("执行sql语句失败", e);
         } finally {
-            DatabaseHelper.closeConnection(conn);
+            DatabaseHelper.closeConnection(connection);
         }
         return null;
     }
