@@ -42,7 +42,7 @@ public class CustomerServiceTest {
     @Test
     public void createCustomer(){
         Customer c = new Customer();
-        c.setId(11);
+        c.setId(12);
         c.setName("东南皮革厂");
         c.setContact("黄鹤");
         c.setEmail("abc@qq.com");

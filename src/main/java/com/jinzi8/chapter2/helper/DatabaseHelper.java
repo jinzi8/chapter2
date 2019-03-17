@@ -2,6 +2,7 @@ package com.jinzi8.chapter2.helper;
 
 import com.jinzi8.chapter2.model.Customer;
 import com.jinzi8.chapter2.util.PropsUtil;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.sql.Connection;
@@ -35,25 +37,29 @@ public class DatabaseHelper {
     public static final QueryRunner QUERY_RUNNER = new QueryRunner();
 
     /**
+     * 连接池DBCP
+     */
+    private static final BasicDataSource DATA_SOURCE;
+
+    /**
      * 创建日志对象
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(PropsUtil.class);
-    private static final String DRIVER;
-    private static final String URL;
-    private static final String USERNAME;
-    private static final String PASSWORD;
 
     static {
+        //读取配置文件
         Properties config = PropsUtil.loadProps("config.properties");
-        DRIVER = config.getProperty("jdbc.driver");
-        URL = config.getProperty("jdbc.url");
-        USERNAME = config.getProperty("jdbc.username");
-        PASSWORD = config.getProperty("jdbc.password");
-        try {
-            Class.forName(DRIVER);
-        } catch (ClassNotFoundException e) {
-            LOGGER.error("不能加载jdbc驱动", e);
-        }
+        String driver = config.getProperty("jdbc.driver");
+        String url = config.getProperty("jdbc.url");
+        String username = config.getProperty("jdbc.username");
+        String password = config.getProperty("jdbc.password");
+
+        //初始化连接池
+        DATA_SOURCE = new BasicDataSource();
+        DATA_SOURCE.setDriverClassName(driver);
+        DATA_SOURCE.setUrl(url);
+        DATA_SOURCE.setUsername(username);
+        DATA_SOURCE.setPassword(password);
     }
 
     /**
@@ -172,9 +178,8 @@ public class DatabaseHelper {
             row = QUERY_RUNNER.update(getConnection(), sql, params);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
+        closeConnection();
         return row;
     }
 
@@ -206,9 +211,8 @@ public class DatabaseHelper {
         } catch (Exception e) {
             LOGGER.error("查询单个实体失败", e);
             throw new RuntimeException(e);
-        } finally {
-            closeConnection();
         }
+        closeConnection();
         return entity;
     }
 
@@ -224,9 +228,8 @@ public class DatabaseHelper {
         } catch (Exception e) {
             LOGGER.error("查询实体列表失败", e);
             throw new RuntimeException(e);
-        } finally {
-            closeConnection();
         }
+        closeConnection();
         return entityList;
     }
 
@@ -237,7 +240,8 @@ public class DatabaseHelper {
         Connection conn = CONNECTION_HOLDER.get();
         if (conn == null) {
             try {
-                conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+//                conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                conn = DATA_SOURCE.getConnection();
             } catch (SQLException e) {
                 LOGGER.error("获取连接对象失败", e);
             } finally {
