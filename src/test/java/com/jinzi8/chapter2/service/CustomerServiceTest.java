@@ -1,5 +1,6 @@
 package com.jinzi8.chapter2.service;
 
+import com.jinzi8.chapter2.helper.DatabaseHelper;
 import com.jinzi8.chapter2.model.Customer;
 import org.junit.After;
 import org.junit.Assert;
@@ -28,7 +29,7 @@ public class CustomerServiceTest {
     @Test
     public void getCustomerList() {
         List<Customer> customerList = customerService.getCustomerList();
-        Assert.assertEquals(2, customerList.size());
+        Assert.assertEquals(4, customerList.size());
     }
 
     @Test
@@ -36,31 +37,17 @@ public class CustomerServiceTest {
         long id = 1;
         Customer customer = customerService.getCustomer(id);
         Assert.assertNotNull(customer);
+        System.out.println(customer);
+    }
+    @Test
+    public void createCustomer(){
+        Customer c = new Customer();
+        c.setId(11);
+        c.setName("东南皮革厂");
+        c.setContact("黄鹤");
+        c.setEmail("abc@qq.com");
+        boolean customer = customerService.createCustomer(c);
+        System.out.println(customer);
     }
 
-    @Test
-    public void createCustomer() {
-        HashMap<String, Object> fieldMap = new HashMap<>();
-        fieldMap.put("name", "customer100");
-        fieldMap.put("contact", "john");
-        fieldMap.put("telephone", "14232233333");
-        boolean result = customerService.createCustomer(fieldMap);
-        Assert.assertTrue(result);
-    }
-
-    @Test
-    public void updateCustomer() {
-        long id = 1;
-        HashMap<String, Object> fieldMap = new HashMap<>();
-        fieldMap.put("contact", "eric");
-        boolean result = customerService.updateCustomer(id, fieldMap);
-        Assert.assertTrue(result);
-    }
-
-    @Test
-    public void deleteCustomer() {
-        long id = 1;
-        boolean result = customerService.deleteCustomer(id);
-        Assert.assertTrue(result);
-    }
 }

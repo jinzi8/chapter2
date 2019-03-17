@@ -29,11 +29,11 @@ public class CustomerService {
      * @return 客户列表
      */
     public List<Customer> getCustomerList() {
-        Connection connection = DatabaseHelper.getConnection();
-        try {
-            List<Customer> customers = new ArrayList<>();
+        return DatabaseHelper.queryEntityList(Customer.class, "SELECT * FROM customer");
+/*       Connection connection = DatabaseHelper.getConnection();
+/       try {
             String sql = "SELECT * FROM customer";
-/*
+
             PreparedStatement ppst = conn.prepareStatement(sql);
             ResultSet resultSet = ppst.executeQuery();
             while (resultSet.next()) {
@@ -46,15 +46,15 @@ public class CustomerService {
                 customer.setRemark(resultSet.getString("remark"));
                 customers.add(customer);
             }
-            */
-            customers = DatabaseHelper.queryEntityList(Customer.class, sql, connection);
-            return customers;
+
+            return DatabaseHelper.queryEntityList(Customer.class, sql);
         } catch (Exception e) {
             LOGGER.error("执行sql语句失败", e);
         } finally {
-            DatabaseHelper.closeConnection(connection);
+            DatabaseHelper.closeConnection();
         }
         return null;
+*/
     }
 
     /**
@@ -64,31 +64,28 @@ public class CustomerService {
      * @return
      */
     public Customer getCustomer(long id) {
-        //TODO
-        return null;
+        Customer customer = DatabaseHelper.queryEntity(Customer.class, "select * from customer where id = ?", id);
+        return customer;
     }
 
     /**
      * 创建客户
      */
-    public boolean createCustomer(Map<String, Object> fieldMap) {
-        //TODO
-        return false;
+    public boolean createCustomer(Customer customer) {
+        return DatabaseHelper.insertEntity(customer);
     }
 
     /**
      * 更新客户
      */
-    public boolean updateCustomer(long id, Map<String, Object> fieldMap) {
-        //TODO
-        return false;
+    public boolean updateCustomer(Customer customer) {
+        return DatabaseHelper.updateEntity(customer);
     }
 
     /**
      * 删除客户
      */
-    public boolean deleteCustomer(long id) {
-        //TODO
-        return false;
+    public boolean deleteCustomer(Customer customer) {
+        return DatabaseHelper.deleteEntity(customer);
     }
 }
