@@ -13,7 +13,7 @@ public class DatabaseHelperTest {
     @Test
     public void m1(){
         Customer c = new Customer();
-        c.setId(1);
+        c.setId(11);
         c.setName("东南皮革厂");
         c.setContact("黄鹤");
         c.setEmail("abc@qq.com");

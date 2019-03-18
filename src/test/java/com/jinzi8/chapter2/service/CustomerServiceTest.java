@@ -7,6 +7,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +23,9 @@ public class CustomerServiceTest {
     @Before
     public void setUp() throws Exception {
         //TODO 初始化数据库
+        String file = "sql/customer_init.sql";
+        DatabaseHelper.executeSqlFile(file);
+
     }
 
     @After
@@ -29,7 +35,7 @@ public class CustomerServiceTest {
     @Test
     public void getCustomerList() {
         List<Customer> customerList = customerService.getCustomerList();
-        Assert.assertEquals(4, customerList.size());
+        Assert.assertEquals(2, customerList.size());
     }
 
     @Test
